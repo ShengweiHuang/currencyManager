@@ -1,6 +1,7 @@
 library(shiny)
 library(plotly)
 library(RCurl)
+library(XML)
 
 currencyType = c("USD", "CAD", "JPY", "HKD", "GBP", "AUD", "SGD", "CHF")
 buySell = c("Buy", "Sell")
