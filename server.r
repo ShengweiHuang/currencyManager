@@ -9,15 +9,18 @@ shinyServer(function(input, output, session) {
           toString(input$quantity),
           toString(input$price))
     print(d)
-    fileName = paste(d[1], ".csv", sep = "")
+    fileName = paste("./", d[1], ".csv", sep = "")
     ## read data
     if (file.exists(fileName)) {
       dataTable = as.data.frame(read.csv(fileName, header = FALSE))
     }
-    else {
+    else if (input$addRecord == "No") { # if no user record and don't want to add a new record
       dataTable = t(as.data.frame(c(0,0,0,0,0,0,0)))
       colnames(dataTable) = cName[1:7]
       return(dataTable)
+    }
+    else { # add new user and data
+      dataTable = t(as.data.frame(c(0,0,0,0,0,0,0)))
     }
     ## add data
     if (input$addRecord == "Yes") {
