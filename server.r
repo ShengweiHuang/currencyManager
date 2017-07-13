@@ -1,35 +1,20 @@
 shinyServer(function(input, output, session) {
   # update table
   output$recordTable <- renderTable({
-    d = c(toString(input$id),
-          toString(Sys.time()),
+    d = c(toString(Sys.time()),
           toString(input$recordCurrencyType),
           toString(input$buySellSelect),
           toString(input$cashSpotSelect),
           toString(input$quantity),
           toString(input$price))
-    print(d)
-    fileName = paste("./", d[1], ".csv", sep = "")
     ## read data
-    if (file.exists(fileName)) {
-      dataTable = as.data.frame(read.csv(fileName, header = FALSE))
-    }
-    else if (input$addRecord == "No") { # if no user record and don't want to add a new record
-      dataTable = t(as.data.frame(c(0,0,0,0,0,0,0)))
-      colnames(dataTable) = cName[1:7]
-      return(dataTable)
-    }
-    else { # add new user and data
-      dataTable = t(as.data.frame(c(0,0,0,0,0,0,0)))
-    }
+    fileName = "data.csv"
+    dataTable = as.data.frame(read.csv(fileName, header = FALSE))
     ## add data
-    if (input$addRecord == "Yes") {
-      if (d[1] != "" && !is.na(as.numeric(d[6])) && !is.na(as.numeric(d[7]))) {
-        newData = toRecordData(d)
-        #colnames(newData) = c()
-        dataTable = rbind(dataTable, newData)
-        write.table(dataTable, file = fileName, col.names = FALSE, row.names = FALSE, sep = ",")
-      }
+    if (!is.na(as.numeric(d[5])) && !is.na(as.numeric(d[6]))) {
+      newData = toRecordData(d)
+      dataTable = rbind(dataTable, newData)
+      write.table(dataTable, file = fileName, col.names = FALSE, row.names = FALSE, sep = ",")
     }
     ## cal data
     totalPrice = as.data.frame(as.numeric(dataTable[,3]) * as.numeric(dataTable[,4]) + as.numeric(dataTable[,5]) * as.numeric(dataTable[,6]))
@@ -64,12 +49,12 @@ shinyServer(function(input, output, session) {
 
 # convert data from input to record data format
 toRecordData <- function(d){
-  time = d[2]
-  currencyType = d[3]
-  buySellSelect = d[4]
-  cashSpotSelect = d[5]
-  quantity = d[6]
-  price = d[7]
+  time = d[1]
+  currencyType = d[2]
+  buySellSelect = d[3]
+  cashSpotSelect = d[4]
+  quantity = d[5]
+  price = d[6]
   result = c(time, currencyType)
   if (buySellSelect == "Buy") {
     result = c(result, quantity, price, 0, 0)
