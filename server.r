@@ -8,7 +8,7 @@ shinyServer(function(input, output, session) {
           toString(input$quantity),
           toString(input$price))
     ## read data
-    fileName = "data.csv"
+    fileName = "./data.csv"
     dataTable = as.data.frame(read.csv(fileName, header = FALSE))
     ## add data
     if (!is.na(as.numeric(d[5])) && !is.na(as.numeric(d[6]))) {
