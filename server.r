@@ -8,7 +8,7 @@ shinyServer(function(input, output, session) {
           toString(input$quantity),
           toString(input$price))
     ## read data
-    fileName = "./data.csv"
+    fileName = "/srv/shiny-server/s1031431/currencyManager/data.csv"
     dataTable = as.data.frame(read.csv(fileName, header = FALSE))
     ## add data
     if (!is.na(as.numeric(d[5])) && !is.na(as.numeric(d[6]))) {
@@ -17,7 +17,7 @@ shinyServer(function(input, output, session) {
       write.table(dataTable, file = fileName, col.names = FALSE, row.names = FALSE, sep = ",")
     }
     ## cal data
-    totalPrice = as.data.frame(as.numeric(dataTable[,3]) * as.numeric(dataTable[,4]) + as.numeric(dataTable[,5]) * as.numeric(dataTable[,6]))
+    totalPrice = ceiling(as.data.frame(as.numeric(dataTable[,3]) * as.numeric(dataTable[,4]) + as.numeric(dataTable[,5]) * as.numeric(dataTable[,6])))
     dataTable = cbind(dataTable, totalPrice)
     ## cal profit
     sellPriceCol = c()
